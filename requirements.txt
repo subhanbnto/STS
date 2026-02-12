@@ -1,0 +1,15 @@
+# Telegram (channel messages)
+telethon>=1.34.0
+
+# HTTP for MEXC API
+requests>=2.31.0
+
+# Config and env
+python-dotenv>=1.0.0
+
+# Dashboard
+flask>=3.0.0
+
+# Optional: for stricter signal parsing with regex
+# (stdlib re is enough; this is optional)
+# regex>=2023.0.0
