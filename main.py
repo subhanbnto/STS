@@ -128,8 +128,12 @@ async def on_message(text: str, _msg) -> None:
         time_iso=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         raw_preview=signal.raw_text,
     ))
-    loop = asyncio.get_event_loop()
-    asyncio.create_task(loop.run_in_executor(None, lambda: run_trade(signal)))
+
+    async def run_trade_async():
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, lambda: run_trade(signal))
+
+    asyncio.create_task(run_trade_async())
 
 
 def main():
