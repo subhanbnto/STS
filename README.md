@@ -75,6 +75,8 @@ The bot works the same for public (@channel) and private (numeric ID) channels.
 
 On first run, Telethon may ask you to log in (phone number + code). The session is saved so you only do this once.
 
+**Deploying on Fly.io (or any headless server)?** The server cannot prompt for phone/code. Run once locally: `python export_telegram_session.py`, then set the printed string as a Fly secret: `fly secrets set TELEGRAM_SESSION_STRING="<string>" -a sts-0`.
+
 ## How signals are parsed
 
 The bot **only reacts to new messages** (no old signals). It supports:

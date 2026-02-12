@@ -3,13 +3,18 @@ Telegram channel listener using Telethon.
 Real-time: uses NewMessage events (push-based), so messages are handled as soon as they arrive.
 No polling delay. You must be a member of the channel.
 Get API credentials: https://my.telegram.org/apps
+
+For headless/server (e.g. Fly.io): set TELEGRAM_SESSION_STRING so the app does not prompt
+for phone/code. Run export_telegram_session.py locally once to generate it.
 """
 import asyncio
 import logging
+import os
 from typing import AsyncIterator, Callable
 
 from telethon import TelegramClient
 from telethon.events import NewMessage
+from telethon.sessions import StringSession
 from telethon.tl.types import Channel, Message
 
 from config import TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_CHANNEL
@@ -20,8 +25,14 @@ logger = logging.getLogger(__name__)
 def _client() -> TelegramClient:
     if not TELEGRAM_API_ID or not TELEGRAM_API_HASH:
         raise ValueError("TELEGRAM_API_ID and TELEGRAM_API_HASH must be set")
+    session_str = os.environ.get("TELEGRAM_SESSION_STRING", "").strip()
+    if session_str:
+        session = StringSession(session_str)
+        logger.info("Using Telegram session from TELEGRAM_SESSION_STRING (headless)")
+    else:
+        session = "signal_trading_session"
     return TelegramClient(
-        "signal_trading_session",
+        session,
         int(TELEGRAM_API_ID),
         TELEGRAM_API_HASH,
     )
